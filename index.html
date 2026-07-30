@@ -249,12 +249,12 @@
   }
 
   .scene.has-photo{ padding-top:66px; justify-content:flex-start; }
-  .polaroid-pair{ display:flex; gap:16px; justify-content:center; align-items:flex-start; margin-bottom:20px; }
+  .polaroid-pair{ display:flex; gap:16px; justify-content:center; align-items:flex-start; }
   .scene.has-photo .polaroid-pair .polaroid{ width:126px; margin:0; }
   .scene.has-photo .polaroid-pair .polaroid img{ height:142px; }
   .scene.has-photo .polaroid-pair .polaroid .cap{ font-size:13px; }
 
-  .scene.has-photo .polaroid{ margin-top:4px; margin-bottom:18px; width:158px; }
+  .scene.has-photo .polaroid{ margin-top:4px; width:158px; }
   .scene.has-photo .polaroid img{ height:182px; }
   .scene.has-photo .polaroid .cap{ font-size:15px; }
   .scene.has-photo .eyebrow{ font-size:11px; margin-bottom:12px; }
@@ -292,7 +292,7 @@
       <div class="mark">✉️</div>
       <div class="eyebrow">A little something for you</div>
       <h1 class="display">You've been<br>invited, Cookie 🩷</h1>
-      <div class="hold-hint">tap to skip, hold to pause</div>
+      <div class="hold-hint">hold to pause</div>
     </section>
 
     <section class="scene scene2" data-duration="20700">
@@ -544,10 +544,7 @@
     if(!started) return;
     if(e.target.closest('button, .restart')) return;
     clearTimeout(holdTimer);
-    if(isHolding){ isHolding = false; resumeTimer(); return; }
-    const rect = stageEl.getBoundingClientRect();
-    const relX = (pressX - rect.left) / rect.width;
-    if(relX < 0.5) showScene(current - 1); else showScene(current + 1);
+    if(isHolding){ isHolding = false; resumeTimer(); }
   });
   stageEl.addEventListener('pointercancel', () => {
     clearTimeout(holdTimer);
