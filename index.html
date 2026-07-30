@@ -292,7 +292,7 @@
       <div class="mark">✉️</div>
       <div class="eyebrow">A little something for you</div>
       <h1 class="display">You've been<br>invited, Cookie 🩷</h1>
-      <div class="hold-hint">hold to pause</div>
+      <div class="hold-hint">tap to skip, hold to pause</div>
     </section>
 
     <section class="scene scene2" data-duration="20700">
@@ -397,7 +397,8 @@
       <div class="sub" style="max-width:280px;">Every kind of ordinary feels good with you in it. Here's to another one, on purpose.</div>
       <div class="signature">always yours, Momo 🥟</div>
       <div class="btn-row">
-        <button class="btn primary" id="yesBtn">Yes, obviously 🕸️</button>
+        <button class="btn primary" id="yesBtn">Yes, obviously ❤️ 🕸️</button>
+        <button class="btn" id="noBtn">No 😢</button>
       </div>
       <div class="heart-burst" id="heartBurst">🕷️❤️</div>
     </section>
@@ -544,7 +545,10 @@
     if(!started) return;
     if(e.target.closest('button, .restart')) return;
     clearTimeout(holdTimer);
-    if(isHolding){ isHolding = false; resumeTimer(); }
+    if(isHolding){ isHolding = false; resumeTimer(); return; }
+    const rect = stageEl.getBoundingClientRect();
+    const relX = (pressX - rect.left) / rect.width;
+    if(relX < 0.5) showScene(current - 1); else showScene(current + 1);
   });
   stageEl.addEventListener('pointercancel', () => {
     clearTimeout(holdTimer);
@@ -557,14 +561,25 @@
 
   restartEl.addEventListener('click', (e) => { e.stopPropagation(); startSong(); showScene(0); });
 
-  document.getElementById('yesBtn').addEventListener('click', (e) => {
-    e.stopPropagation();
+  function celebrateYes(){
     clearTimeout(timer);
     const hb = document.getElementById('heartBurst');
     hb.classList.remove('show');
     void hb.offsetWidth;
     hb.classList.add('show');
     setTimeout(() => { restartEl.classList.add('show'); }, 900);
+  }
+
+  document.getElementById('yesBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    celebrateYes();
+  });
+
+  document.getElementById('noBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    e.currentTarget.textContent = 'Yes, obviously ❤️';
+    e.currentTarget.classList.add('primary');
+    celebrateYes();
   });
 
   cover.addEventListener('click', () => {
